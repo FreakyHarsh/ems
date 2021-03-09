@@ -1,40 +1,10 @@
 import React, { useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
-
-interface TaskInputProps {
-  taskNo: number;
-  getTaskInput: any;
-}
-
-const TaskInput: React.FC<TaskInputProps> = ({ taskNo, getTaskInput }: TaskInputProps) => {
-  return (
-    <div className='form-group'>
-      <label htmlFor={"task-" + taskNo}>Task {taskNo + 1}</label>
-      <input
-        className='form-control'
-        type='text'
-        id={"task-" + taskNo}
-        name={"task-" + taskNo}
-        placeholder='Enter Task Detail'
-        autoComplete='on'
-        onChange={(e) => getTaskInput(e, taskNo)}
-      />
-    </div>
-  );
-};
+import { Button, Col, Container, Form, Row, Alert } from "react-bootstrap";
 
 const AssignTask = () => {
+  const [tsk, setTsk] = useState("");
   const [tasks, setTasks] = useState<string[]>([]);
-  const onAddTask = () => {
-    setTasks([...tasks, ""]);
-  };
-  const getTaskData = (e: any, taskNo: number) => {
-    const tasksDuplicate = [...tasks];
-    tasksDuplicate[taskNo] = e.target.value;
-    console.log(tasksDuplicate);
-    setTasks([...tasksDuplicate]);
-    // console.log(e.target.value, taskNo);
-  };
+
   return (
     <Container>
       <h5 className='text-center text-info p-3'>ASSIGN TASK TO EMPLOYEE</h5>
@@ -51,18 +21,59 @@ const AssignTask = () => {
           </Form>
         </Col>
       </Row>
-      <Row className='mb-2'>
-        <Col>
-          <Button onClick={onAddTask}>Add Task</Button>
+      <Row className='align-items-end'>
+        <Col xs={9}>
+          <div>
+            <label htmlFor='taskInput'>Enter Task:</label>
+            <input
+              className='form-control'
+              type='text'
+              id='taskInput'
+              name='taskInput'
+              autoComplete='on'
+              onChange={(e) => {
+                setTsk(e.target.value);
+              }}
+            />
+          </div>
+        </Col>
+        <Col xs={3}>
+          <Button
+            size='sm'
+            onClick={() => {
+              setTasks([...tasks, tsk]);
+            }}
+          >
+            + Task
+          </Button>
         </Col>
       </Row>
-      <Row>
-        <Col>
-          {tasks.map((task, index) => (
-            <TaskInput taskNo={index} getTaskInput={getTaskData} key={index + Math.random()} />
-          ))}
-        </Col>
-      </Row>
+      <div className='mt-4'>
+        {tasks.map((task, index) => (
+          <Alert
+            key={task + Math.random()}
+            variant='info'
+            style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+          >
+            {task}
+            <Button
+              variant='outline-danger'
+              size='sm'
+              className='border-0'
+              onClick={() => {
+                const removeTasks = [...tasks];
+                removeTasks.splice(index, 1);
+                setTasks(removeTasks);
+              }}
+            >
+              X
+            </Button>
+          </Alert>
+        ))}
+      </div>
+      <div className='d-flex justify-content-end'>
+        <Button onClick={() => {}}>Submit</Button>
+      </div>
     </Container>
   );
 };

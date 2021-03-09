@@ -17,13 +17,25 @@ function Admin() {
           />
           <span className='ml-3'>Jessie Doe</span>
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls='basic-navbar-nav' />
-        <Navbar.Collapse id='basic-navbar-nav'>
+        <Navbar.Toggle aria-controls='navbar' id='toggler' />
+        <Navbar.Collapse id='navbar'>
           <Nav className='ml-auto'>
-            <Nav.Link className='text-center' onClick={() => history.push("./")}>
+            <Nav.Link
+              className='text-center'
+              onClick={() => {
+                history.push("/admin");
+                document.getElementById("toggler")?.click();
+              }}
+            >
               Assign
             </Nav.Link>
-            <Nav.Link className='text-center' onClick={() => history.push("./stats")}>
+            <Nav.Link
+              className='text-center'
+              onClick={() => {
+                history.push("/admin/stats");
+                document.getElementById("toggler")?.click();
+              }}
+            >
               Stats
             </Nav.Link>
             <Nav.Link className='text-center'>Logout</Nav.Link>
