@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Button, Card, Container, Form, Row } from "react-bootstrap";
 import styled from "styled-components";
 import bg from "../assets/images/bg.jpg";
+import { useStore } from "../store";
+import { Actions } from "../store/index";
+import { useHistory } from "react-router-dom";
 const LoginWrapper = styled.div`
   height: 100vh;
   background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.672), rgba(0, 0, 0, 0.7)), url(${bg});
@@ -10,18 +13,24 @@ const LoginWrapper = styled.div`
 `;
 
 function Login() {
-  const [email, setEmail] = useState("");
+  const { state, dispatch } = useStore();
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const history = useHistory();
+
   const onLogin = async (e: any) => {
     let role = "employees";
     e.preventDefault();
-    if (email === "admin") {
+    if (username === "admin") {
       role = "admin";
     }
     const res = await fetch(baseURL + "/" + role + "/login", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
-        username: email,
+        username: username,
         password: password,
       }),
     })
@@ -29,6 +38,11 @@ function Login() {
       .then((data) => data)
       .catch((e) => console.log(e));
     console.log(res);
+    if (res.username) {
+      dispatch({ type: Actions.setUser, payload: { ...res } });
+      dispatch({ type: Actions.setIsLogin, payload: true });
+      res.username === "admin" ? history.push("/admin") : history.push("/employee");
+    }
   };
   return (
     <LoginWrapper>
@@ -38,12 +52,12 @@ function Login() {
             <Form>
               <Form.Group>
                 <Form.Label>
-                  <Form.Text className='text-muted'>Email</Form.Text>
+                  <Form.Text className='text-muted'>Username</Form.Text>
                 </Form.Label>
                 <Form.Control
-                  type='email'
-                  placeholder='Enter Email'
-                  onChange={(e: any) => setEmail(e.target.value)}
+                  type='username'
+                  placeholder='Enter Username'
+                  onChange={(e: any) => setUsername(e.target.value)}
                 />
               </Form.Group>
               <Form.Group>

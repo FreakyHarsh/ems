@@ -3,6 +3,7 @@ import Employee from "./Employee/Employee";
 import Login from "./components/Login";
 import { Route, Switch } from "react-router-dom";
 import Admin from "./Admin/Admin";
+import Error from "./components/Error";
 
 function App() {
   return (
@@ -16,6 +17,9 @@ function App() {
         </Route>
         <Route path='/admin'>
           <Admin />
+        </Route>
+        <Route path='/'>
+          <Error />
         </Route>
       </Switch>
     </div>

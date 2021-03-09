@@ -1,21 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Image, Nav, Navbar } from "react-bootstrap";
 import { Route, Switch, useHistory } from "react-router-dom";
+import { Actions, useStore } from "../store";
 import AssignTask from "./AssignTask";
 import Stats from "./Stats";
 
 function Admin() {
   const history = useHistory();
+  const { dispatch } = useStore();
+
   return (
     <div>
       <Navbar bg='light' expand='lg'>
         <Navbar.Brand>
-          <Image
-            src='https://randomuser.me/api/portraits/women/67.jpg'
-            roundedCircle
-            style={{ width: "3rem" }}
-          />
-          <span className='ml-3'>Jessie Doe</span>
+          <span className='ml-3'>Admin</span>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls='navbar' id='toggler' />
         <Navbar.Collapse id='navbar'>
@@ -38,7 +36,15 @@ function Admin() {
             >
               Stats
             </Nav.Link>
-            <Nav.Link className='text-center'>Logout</Nav.Link>
+            <Nav.Link
+              className='text-center'
+              onClick={() => {
+                dispatch({ type: Actions.setIsLogin, payload: false });
+                history.push("/");
+              }}
+            >
+              Logout
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

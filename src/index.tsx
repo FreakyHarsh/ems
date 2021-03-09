@@ -5,14 +5,17 @@ import "./index.css";
 import "bootstrap/dist/css/bootstrap.css";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
+import { AppState } from "./store";
 
 (window as any).baseURL = process.env.REACT_APP_BASE_URL;
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <AppState>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </AppState>
   </React.StrictMode>,
   document.getElementById("root")
 );

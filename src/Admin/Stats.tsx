@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Row, Table } from "react-bootstrap";
+import moment from "moment";
 
 const Stats = () => {
+  const [employees, setEmployees] = useState([]);
+  useEffect(() => {
+    const getStats = async () => {
+      const res = await fetch(baseURL + "/employees")
+        .then((res) => res.json())
+        .then((data) => data);
+      setEmployees(res);
+      console.log(res);
+    };
+    getStats();
+  }, []);
   return (
     <Container>
       <Row>
@@ -9,19 +21,23 @@ const Stats = () => {
           <Table striped bordered hover responsive>
             <thead className='text-center'>
               <tr>
-                {/* <th>#</th> */}
+                <th>#</th>
                 <th>Employee</th>
                 <th>Login Time</th>
                 <th>Logout Time</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                {/* <td>1</td> */}
-                <td>jlj</td>
-                <td>12:00 PM</td>
-                <td>12:00 AM</td>
-              </tr>
+              {employees.map((emp: any, index) => (
+                <tr style={{ textAlign: "center" }}>
+                  <td>{index + 1}</td>
+                  <td>{emp?.username}</td>
+                  <td>{emp?.lastLogin ? moment(emp?.lastLogin).format("LT") : "Not available"}</td>
+                  <td>
+                    {emp?.lastLogout ? moment(emp?.lastLogout).format("LT") : "Not available"}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </Table>
         </Col>
