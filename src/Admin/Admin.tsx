@@ -7,8 +7,13 @@ import Stats from "./Stats";
 
 function Admin() {
   const history = useHistory();
-  const { dispatch } = useStore();
-
+  const {
+    state: { isLogin },
+    dispatch,
+  } = useStore();
+  useEffect(() => {
+    !isLogin && history.push("/");
+  }, []);
   return (
     <div>
       <Navbar bg='light' expand='lg'>
